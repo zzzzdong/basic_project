@@ -2,17 +2,11 @@ package com.example.basic_project.member.domain.entity;
 
 import com.example.basic_project.member.domain.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "members")
 public class Member {
     @Id
@@ -45,7 +39,10 @@ public class Member {
 
     @PrePersist
     public void onCreate() {
-        this.createdAt = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        this.createdAt = now;
+        this.updatedAt = now;
+
     }
 
     @PreUpdate
@@ -53,14 +50,15 @@ public class Member {
         this.updatedAt = LocalDateTime.now(ZoneOffset.UTC);
     }
 
-    public void update(String name, String password) {
-        this.name = name;
+    protected Member() {}
+
+    public Member(String email, String password, String name) {
+        this.email = email;
         this.password = password;
+        this.name = name;
     }
 
-    public void softDelete() {
-        this.isDeleted = true;
-        this.deletedAt = LocalDateTime.now(ZoneOffset.UTC);
+    public Long getId() {
+        return id;
     }
-
 }
