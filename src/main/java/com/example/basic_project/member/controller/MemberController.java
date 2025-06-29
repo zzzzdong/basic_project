@@ -40,6 +40,14 @@ public class MemberController {
     }
 
     // 멤버 전체 조회
+    @GetMapping
+    public ResponseEntity<ReadMembersResDto> getMembers() {
+        ReadMembersResDto resDto = memberService.getMembersService();
+        ResponseEntity<ReadMembersResDto> response = new ResponseEntity(resDto, HttpStatus.OK);
+        return response;
+    }
+
+    // 멤버 수정
 
 
 }

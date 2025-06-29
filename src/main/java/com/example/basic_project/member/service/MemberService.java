@@ -1,14 +1,14 @@
 package com.example.basic_project.member.service;
 
-import com.example.basic_project.member.controller.dto.CreateMemberReqDto;
-import com.example.basic_project.member.controller.dto.CreateMemberResDto;
-import com.example.basic_project.member.controller.dto.ReadDetailMemberResDto;
+import com.example.basic_project.member.controller.dto.*;
 import com.example.basic_project.member.domain.entity.Member;
 import com.example.basic_project.member.domain.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -62,5 +62,21 @@ public class MemberService {
             ReadDetailMemberResDto resDto = new ReadDetailMemberResDto(status, message, null, null, null, null);
             return resDto;
         }
+    }
+
+    // 전체 조회
+    public ReadMembersResDto getMembersService() {
+        List<Member> memberList = memberRepository.findAll();
+
+        List<MemberDto> memberDtoList = new ArrayList<>();
+
+        for (Member member : memberList) {
+            MemberDto memberDto = new MemberDto(member.getId(), member.getName(), member.getCreatedAt(), member.getUpdatedAt());
+            memberDtoList.add(memberDto);
+        }
+
+        ReadMembersResDto resDto = new ReadMembersResDto(200, "success", memberDtoList);
+
+        return resDto;
     }
 }
