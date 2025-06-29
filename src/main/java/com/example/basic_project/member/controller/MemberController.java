@@ -29,4 +29,17 @@ public class MemberController {
         ResponseEntity<CreateMemberResDto> response = new ResponseEntity<>(resDto, HttpStatus.CREATED);
         return response;
     }
+
+    // 멤버 단건 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadDetailMemberResDto> getMember(@PathVariable Long id) {
+        ReadDetailMemberResDto resDto = memberService.getMemberService(id);
+
+        ResponseEntity<ReadDetailMemberResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
+        return response;
+    }
+
+    // 멤버 전체 조회
+
+
 }
