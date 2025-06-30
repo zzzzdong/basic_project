@@ -2,6 +2,7 @@ package com.example.basic_project.member.service;
 
 import com.example.basic_project.member.controller.dto.*;
 import com.example.basic_project.member.domain.entity.Member;
+import com.example.basic_project.member.domain.enums.Role;
 import com.example.basic_project.member.domain.repository.MemberRepository;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,10 +35,11 @@ public class MemberService {
         String email = reqDto.getEmail();
         String name = reqDto.getName();
         String password = reqDto.getPassword();
+        Role role = reqDto.getrole();
 
-        Member member = new Member(email, password, name);
+        Member member = new Member(email, password, name, role);
 
-        Member savedmember= memberRepository.save(member);
+        Member savedmember = memberRepository.save(member);
         Long savedMemberId = savedmember.getId();
 
         CreateMemberResDto resDto =  new CreateMemberResDto(201, "회원 생성 되었습니다.", savedMemberId);
@@ -55,6 +57,7 @@ public class MemberService {
                 "success",
                 foundMember.getId(),
                 foundMember.getName(),
+                foundMember.getRole(),
                 foundMember.getCreatedAt(),
                 foundMember.getUpdatedAt()
         );
@@ -109,6 +112,7 @@ public class MemberService {
                 .map(member -> new MemberDto(
                         member.getId(),
                         member.getName(),
+                        member.getRole(),
                         member.getCreatedAt(),
                         member.getUpdatedAt())
                 ).collect(Collectors.toList());
@@ -125,11 +129,12 @@ public class MemberService {
     ) {
         String name = reqDto.getName();
         String password = reqDto.getPassword();
+        Role role = reqDto.getRole();
 
         Member foundMember = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
-        foundMember.updateMember(name, password);
+        foundMember.updateMember(name, password, role);
 
         return new UpdateMemberResDto(200, "updated", foundMember.getId());
 
@@ -156,7 +161,7 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
-        member.softDalete();
+        member.softDelete();
 
         return new DeleteMemberResDto(200, "deleted");
 

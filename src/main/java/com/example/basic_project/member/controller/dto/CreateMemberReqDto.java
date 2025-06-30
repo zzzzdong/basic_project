@@ -1,5 +1,6 @@
 package com.example.basic_project.member.controller.dto;
 
+import com.example.basic_project.member.domain.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ public class CreateMemberReqDto {
 
     private String password;
 
+    private Role role;
+
     public String getEmail() {
         return email;
     }
@@ -23,5 +26,9 @@ public class CreateMemberReqDto {
 
     public String getPassword() {
         return password;
+    }
+
+    public Role getrole() {
+        return role;
     }
 }

@@ -5,21 +5,25 @@ import com.example.basic_project.task.domain.enums.Priority;
 import com.example.basic_project.task.domain.enums.Status;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class CreateTaskReqDto {
+// ReadTasksResDto에서 활용
+public class TaskDto {
+    private Long id;
     private String title;
-
     private String description;
-
     private Priority priority;
-
-    private Member assigneeId;
-
-    private LocalDate dueDate;
-
-    private LocalDate startedAt;
-
     private Status taskStatus;
+    private Member assigneeId;
+    private Member authorId;
+    private LocalDate dueDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+
+    public Long getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;
@@ -33,37 +37,40 @@ public class CreateTaskReqDto {
         return priority;
     }
 
+    public Status getTaskStatus() {
+        return taskStatus;
+    }
+
     public Member getAssigneeId() {
         return assigneeId;
+    }
+
+    public Member getAuthorId() {
+        return authorId;
     }
 
     public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public LocalDate getStartedAt() {
-        return startedAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public Status getTaskStatus() {
-        return taskStatus;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public CreateTaskReqDto(
-            String title,
-            String description,
-            Priority priority,
-            Member assigneeId,
-            LocalDate dueDate,
-            LocalDate startedAt,
-            Status taskStatus
-    ) {
+    public TaskDto(Long id, String title, String description, Priority priority, Status taskStatus, Member assigneeId, Member authorId, LocalDate dueDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.priority = priority;
-        this.assigneeId = assigneeId;
-        this.dueDate = dueDate;
-        this.startedAt = startedAt;
         this.taskStatus = taskStatus;
+        this.assigneeId = assigneeId;
+        this.authorId = authorId;
+        this.dueDate = dueDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

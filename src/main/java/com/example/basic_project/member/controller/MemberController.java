@@ -43,7 +43,8 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<ReadMembersResDto> getMembers() {
         ReadMembersResDto resDto = memberService.getMembersService();
-        ResponseEntity<ReadMembersResDto> response = new ResponseEntity(resDto, HttpStatus.OK);
+
+        ResponseEntity<ReadMembersResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
         return response;
     }
 

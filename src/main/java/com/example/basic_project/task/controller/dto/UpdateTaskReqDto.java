@@ -6,20 +6,14 @@ import com.example.basic_project.task.domain.enums.Status;
 
 import java.time.LocalDate;
 
-public class CreateTaskReqDto {
+public class UpdateTaskReqDto {
     private String title;
-
     private String description;
-
     private Priority priority;
-
-    private Member assigneeId;
-
-    private LocalDate dueDate;
-
-    private LocalDate startedAt;
-
     private Status taskStatus;
+    private Member assigneeId;
+    private LocalDate dueDate;
+    private LocalDate startedAt;
 
     public String getTitle() {
         return title;
@@ -33,6 +27,10 @@ public class CreateTaskReqDto {
         return priority;
     }
 
+    public Status getTaskStatus() {
+        return taskStatus;
+    }
+
     public Member getAssigneeId() {
         return assigneeId;
     }
@@ -43,27 +41,5 @@ public class CreateTaskReqDto {
 
     public LocalDate getStartedAt() {
         return startedAt;
-    }
-
-    public Status getTaskStatus() {
-        return taskStatus;
-    }
-
-    public CreateTaskReqDto(
-            String title,
-            String description,
-            Priority priority,
-            Member assigneeId,
-            LocalDate dueDate,
-            LocalDate startedAt,
-            Status taskStatus
-    ) {
-        this.title = title;
-        this.description = description;
-        this.priority = priority;
-        this.assigneeId = assigneeId;
-        this.dueDate = dueDate;
-        this.startedAt = startedAt;
-        this.taskStatus = taskStatus;
     }
 }

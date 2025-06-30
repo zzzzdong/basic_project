@@ -37,6 +37,7 @@ public class Member {
     @Column
     private LocalDateTime deletedAt;
 
+
     @PrePersist
     public void onCreate() {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
@@ -52,10 +53,11 @@ public class Member {
 
     protected Member() {}
 
-    public Member(String email, String password, String name) {
+    public Member(String email, String password, String name, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.role = role;
     }
 
     public Long getId() {
@@ -66,6 +68,10 @@ public class Member {
         return name;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
@@ -74,16 +80,16 @@ public class Member {
         return createdAt;
     }
 
-    public void updateMember(String name, String password) {
+    public void updateMember(String name, String password, Role role) {
         this.name = name;
         this.password = password;
+        this.role = role;
     }
 
-    public void softDalete() {
+    public void softDelete() {
         this.isDeleted = true;
     }
 
-    public Boolean isDeleted() {
-        return isDeleted;
-    }
+
+
 }
