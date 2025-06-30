@@ -59,7 +59,13 @@ public class MemberService {
             Integer status = 404;
             String message = "회원을 찾을 수 없습니다.";
 
-            ReadDetailMemberResDto resDto = new ReadDetailMemberResDto(status, message, null, null, null, null);
+            ReadDetailMemberResDto resDto = new ReadDetailMemberResDto(
+                    status,
+                    message,
+                    null,
+                    null,
+                    null,
+                    null);
             return resDto;
         }
     }
@@ -71,12 +77,42 @@ public class MemberService {
         List<MemberDto> memberDtoList = new ArrayList<>();
 
         for (Member member : memberList) {
-            MemberDto memberDto = new MemberDto(member.getId(), member.getName(), member.getCreatedAt(), member.getUpdatedAt());
+            MemberDto memberDto = new MemberDto(
+                    member.getId(),
+                    member.getName(),
+                    member.getCreatedAt(),
+                    member.getUpdatedAt());
             memberDtoList.add(memberDto);
         }
 
         ReadMembersResDto resDto = new ReadMembersResDto(200, "success", memberDtoList);
 
         return resDto;
+    }
+
+    // 수정
+    public UpdateMemberResDto updateMemberService(
+            Long id,
+            UpdateMemberReqDto reqDto
+    ) {
+        String name = reqDto.getName();
+        String password = reqDto.getPassword();
+
+        Optional<Member> memberOptional = memberRepository.findById(id);
+        if (memberOptional.isPresent()) {
+            Member foundmember = memberOptional.get();
+
+            foundmember.updateMember(name, password);
+
+            UpdateMemberResDto resDto = new UpdateMemberResDto(200, "updated", foundmember.getId());
+            return resDto;
+
+        } else {
+            Integer status = 404;
+            String message = "회원을 찾을 수 없습니다.";
+
+            return new UpdateMemberResDto(status, message, null);
+        }
+
     }
 }

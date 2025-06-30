@@ -73,4 +73,9 @@ public class Member {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    public void updateMember(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }

@@ -48,6 +48,18 @@ public class MemberController {
     }
 
     // 멤버 수정
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateMemberResDto> updateMember(
+            @PathVariable Long id,
+            @RequestBody UpdateMemberReqDto reqDto
+    ) {
+        UpdateMemberResDto resDto = memberService.updateMemberService(id, reqDto);
+        ResponseEntity<UpdateMemberResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
+        return response;
+
+    }
+
+    // 멤버 삭제(soft)
 
 
 }
