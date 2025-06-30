@@ -5,6 +5,7 @@ import com.example.basic_project.member.domain.entity.Member;
 import com.example.basic_project.member.domain.repository.MemberRepository;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MemberService {
 
     // 속
@@ -46,6 +48,7 @@ public class MemberService {
     public ReadDetailMemberResDto getMemberService(Long id) {
         Member foundMember = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
 
         return new ReadDetailMemberResDto(
                 200,
@@ -88,6 +91,7 @@ public class MemberService {
     // 전체 조회
     public ReadMembersResDto getMembersService() {
         List<Member> memberList = memberRepository.findAll();
+
 
 //        List<MemberDto> memberDtoList = new ArrayList<>();
 //
@@ -144,6 +148,17 @@ public class MemberService {
 //
 //            return new UpdateMemberResDto(status, message, null);
 //       }
+
+    }
+
+    // 삭제
+    public DeleteMemberResDto deleteMemberService(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        member.softDalete();
+
+        return new DeleteMemberResDto(200, "deleted");
 
     }
 }

@@ -60,6 +60,14 @@ public class MemberController {
     }
 
     // 멤버 삭제(soft)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DeleteMemberResDto> deleteMember(@PathVariable Long id) {
+
+        DeleteMemberResDto resDto = memberService.deleteMemberService(id);
+
+        ResponseEntity<DeleteMemberResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
+        return response;
+    }
 
 
 

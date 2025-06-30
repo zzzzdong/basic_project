@@ -78,4 +78,12 @@ public class Member {
         this.name = name;
         this.password = password;
     }
+
+    public void softDalete() {
+        this.isDeleted = true;
+    }
+
+    public Boolean isDeleted() {
+        return isDeleted;
+    }
 }
