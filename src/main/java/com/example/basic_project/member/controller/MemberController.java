@@ -62,4 +62,5 @@ public class MemberController {
     // 멤버 삭제(soft)
 
 
+
 }

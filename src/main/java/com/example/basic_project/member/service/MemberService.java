@@ -3,6 +3,8 @@ package com.example.basic_project.member.service;
 import com.example.basic_project.member.controller.dto.*;
 import com.example.basic_project.member.domain.entity.Member;
 import com.example.basic_project.member.domain.repository.MemberRepository;
+import com.fasterxml.jackson.annotation.JacksonInject;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberService {
@@ -41,49 +44,70 @@ public class MemberService {
 
     // 단건 조회
     public ReadDetailMemberResDto getMemberService(Long id) {
-        Optional<Member> memberOptional = memberRepository.findById(id);
+        Member foundMember = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
-        if (memberOptional.isPresent()) {
-            Member foundMember = memberOptional.get();
-            Long foundMemberId = foundMember.getId();
-            String foundMemberName = foundMember.getName();
-            LocalDateTime foundMemberCreatedAt = foundMember.getCreatedAt();
-            LocalDateTime foundMemberUpdatedAt = foundMember.getUpdatedAt();
-            Integer status = 200;
-            String message = "success";
+        return new ReadDetailMemberResDto(
+                200,
+                "success",
+                foundMember.getId(),
+                foundMember.getName(),
+                foundMember.getCreatedAt(),
+                foundMember.getUpdatedAt()
+        );
 
-            ReadDetailMemberResDto resDto = new ReadDetailMemberResDto(status, message, foundMemberId, foundMemberName, foundMemberCreatedAt, foundMemberUpdatedAt);
-            return resDto;
-
-        } else {
-            Integer status = 404;
-            String message = "회원을 찾을 수 없습니다.";
-
-            ReadDetailMemberResDto resDto = new ReadDetailMemberResDto(
-                    status,
-                    message,
-                    null,
-                    null,
-                    null,
-                    null);
-            return resDto;
-        }
+//        Optional<Member> memberOptional = memberRepository.findById(id);
+//
+//        if (memberOptional.isPresent()) {
+//            Member foundMember = memberOptional.get();
+//            Long foundMemberId = foundMember.getId();
+//            String foundMemberName = foundMember.getName();
+//            LocalDateTime foundMemberCreatedAt = foundMember.getCreatedAt();
+//            LocalDateTime foundMemberUpdatedAt = foundMember.getUpdatedAt();
+//            Integer status = 200;
+//            String message = "success";
+//
+//            ReadDetailMemberResDto resDto = new ReadDetailMemberResDto(status, message, foundMemberId, foundMemberName, foundMemberCreatedAt, foundMemberUpdatedAt);
+//            return resDto;
+//
+//        } else {
+//            Integer status = 404;
+//            String message = "회원을 찾을 수 없습니다.";
+//
+//            ReadDetailMemberResDto resDto = new ReadDetailMemberResDto(
+//                    status,
+//                    message,
+//                    null,
+//                    null,
+//                    null,
+//                    null);
+//            return resDto;
+//        }
     }
 
     // 전체 조회
     public ReadMembersResDto getMembersService() {
         List<Member> memberList = memberRepository.findAll();
 
-        List<MemberDto> memberDtoList = new ArrayList<>();
+//        List<MemberDto> memberDtoList = new ArrayList<>();
+//
+//        for (Member member : memberList) {
+//            MemberDto memberDto = new MemberDto(
+//                    member.getId(),
+//                    member.getName(),
+//                    member.getCreatedAt(),
+//                    member.getUpdatedAt());
+//            memberDtoList.add(memberDto);
+//        }
 
-        for (Member member : memberList) {
-            MemberDto memberDto = new MemberDto(
-                    member.getId(),
-                    member.getName(),
-                    member.getCreatedAt(),
-                    member.getUpdatedAt());
-            memberDtoList.add(memberDto);
-        }
+        // for 문 -> 스트림 변경
+        List<MemberDto> memberDtoList = memberList.stream()
+                .map(member -> new MemberDto(
+                        member.getId(),
+                        member.getName(),
+                        member.getCreatedAt(),
+                        member.getUpdatedAt())
+                ).collect(Collectors.toList());
 
         ReadMembersResDto resDto = new ReadMembersResDto(200, "success", memberDtoList);
 
@@ -98,21 +122,28 @@ public class MemberService {
         String name = reqDto.getName();
         String password = reqDto.getPassword();
 
-        Optional<Member> memberOptional = memberRepository.findById(id);
-        if (memberOptional.isPresent()) {
-            Member foundmember = memberOptional.get();
+        Member foundMember = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
-            foundmember.updateMember(name, password);
+        foundMember.updateMember(name, password);
 
-            UpdateMemberResDto resDto = new UpdateMemberResDto(200, "updated", foundmember.getId());
-            return resDto;
+        return new UpdateMemberResDto(200, "updated", foundMember.getId());
 
-        } else {
-            Integer status = 404;
-            String message = "회원을 찾을 수 없습니다.";
-
-            return new UpdateMemberResDto(status, message, null);
-        }
+//        Optional<Member> memberOptional = memberRepository.findById(id);
+//        if (memberOptional.isPresent()) {
+//            Member foundmember = memberOptional.get();
+//
+//            foundmember.updateMember(name, password);
+//
+//            UpdateMemberResDto resDto = new UpdateMemberResDto(200, "updated", foundmember.getId());
+//            return resDto;
+//
+//        } else {
+//            Integer status = 404;
+//            String message = "회원을 찾을 수 없습니다.";
+//
+//            return new UpdateMemberResDto(status, message, null);
+//       }
 
     }
 }
