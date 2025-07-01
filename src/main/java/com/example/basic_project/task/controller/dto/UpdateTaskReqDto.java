@@ -11,7 +11,7 @@ public class UpdateTaskReqDto {
     private String description;
     private Priority priority;
     private Status taskStatus;
-    private Member assigneeId;
+    private Long assigneeId;
     private LocalDate dueDate;
     private LocalDate startedAt;
 
@@ -31,7 +31,7 @@ public class UpdateTaskReqDto {
         return taskStatus;
     }
 
-    public Member getAssigneeId() {
+    public Long getAssigneeId() {
         return assigneeId;
     }
 

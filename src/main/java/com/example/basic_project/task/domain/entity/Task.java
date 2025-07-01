@@ -29,11 +29,11 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status taskStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "assignee_id")
     private Member assignee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "author_id")
     private Member author;
 
@@ -122,6 +122,7 @@ public class Task {
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now(ZoneOffset.UTC);
+        this.updatedAt = LocalDateTime.now(ZoneOffset.UTC);
     }
 
     @PreUpdate

@@ -108,14 +108,17 @@ public class TaskService {
         String description = reqDto.getDescription();
         Priority priority = reqDto.getPriority();
         Status taskStatus = reqDto.getTaskStatus();
-        Member assigneeId = reqDto.getAssigneeId();
+        Long assigneeId = reqDto.getAssigneeId();
         LocalDate dueDate = reqDto.getDueDate();
         LocalDate startedAt = reqDto.getStartedAt();
 
         Task foundTask = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 작업을 찾을 수 없습니다."));
 
-        foundTask.updateTask(title, description, priority, taskStatus, assigneeId, dueDate, startedAt);
+        Member assignee = memberRepository.findById(assigneeId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 담당자를 찾을 수 없습니다."));
+
+        foundTask.updateTask(title, description, priority, taskStatus, assignee, dueDate, startedAt);
 
         return new UpdateTaskResDto(200, "updated", foundTask.getId());
     }
