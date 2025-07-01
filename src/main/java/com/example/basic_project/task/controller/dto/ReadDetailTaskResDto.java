@@ -15,8 +15,8 @@ public class ReadDetailTaskResDto {
     private String description;
     private Priority priority;
     private Status taskStatus;
-    private Member assigneeId;
-    private Member authorId;
+    private Long assigneeId;
+    private Long authorId;
     private LocalDate dueDate;
     private LocalDate startedAt;
     private LocalDateTime createdAt;
@@ -50,11 +50,11 @@ public class ReadDetailTaskResDto {
         return taskStatus;
     }
 
-    public Member getAssigneeId() {
+    public Long getAssigneeId() {
         return assigneeId;
     }
 
-    public Member getAuthorId() {
+    public Long getAuthorId() {
         return authorId;
     }
 
@@ -82,9 +82,10 @@ public class ReadDetailTaskResDto {
             String description,
             Priority priority,
             Status taskStatus,
-            Member assigneeId,
-            Member authorId,
+            Long assigneeId,
+            Long authorId,
             LocalDate dueDate,
+            LocalDate startedAt,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {

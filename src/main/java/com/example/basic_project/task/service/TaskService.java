@@ -2,6 +2,7 @@ package com.example.basic_project.task.service;
 
 import com.example.basic_project.member.controller.dto.ReadMembersResDto;
 import com.example.basic_project.member.domain.entity.Member;
+import com.example.basic_project.member.domain.repository.MemberRepository;
 import com.example.basic_project.task.controller.dto.*;
 import com.example.basic_project.task.domain.entity.Task;
 import com.example.basic_project.task.domain.enums.Priority;
@@ -20,10 +21,12 @@ public class TaskService {
 
     // 속
     private final TaskRepository taskRepository;
+    private final MemberRepository memberRepository;
 
     // 생
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, MemberRepository memberRepository) {
         this.taskRepository = taskRepository;
+        this.memberRepository = memberRepository;
     }
 
     // 기
@@ -33,12 +36,19 @@ public class TaskService {
         String title = reqDto.getTitle();
         String description = reqDto.getDescription();
         Priority priority = reqDto.getPriority();
-        Member assigneeId = reqDto.getAssigneeId();
+        Long assigneeId = reqDto.getAssigneeId();
+        Long authorId = reqDto.getAuthorId();
         LocalDate dueDate = reqDto.getDueDate();
         LocalDate startedAt = reqDto.getStartedAt();
         Status taskStatus = reqDto.getTaskStatus();
 
-        Task task = new Task(title, description, priority, assigneeId, dueDate, startedAt, taskStatus);
+        Member assignee = memberRepository.findById(assigneeId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 담당자를 찾을 수 없습니다."));
+
+        Member author = memberRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 작성자를 찾을 수 없습니다."));
+
+        Task task = new Task(title, description, priority, assignee, author, dueDate, startedAt, taskStatus);
 
         Task savedtask = taskRepository.save(task);
         Long savedTaskId = savedtask.getId();
@@ -50,7 +60,7 @@ public class TaskService {
     // 단건 조회
     public ReadDetailTaskResDto getTaskService(Long id) {
         Task foundTask = taskRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 작업이 존재하지 않습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 작업을 찾을 수 없습니다."));
 
         return new ReadDetailTaskResDto(
                 200,
@@ -60,9 +70,10 @@ public class TaskService {
                 foundTask.getDescription(),
                 foundTask.getPriority(),
                 foundTask.getTaskStatus(),
-                foundTask.getAssignee(),
-                foundTask.getAuthor(),
+                foundTask.getAssignee().getId(),
+                foundTask.getAuthor().getId(),
                 foundTask.getDueDate(),
+                foundTask.getStartedAt(),
                 foundTask.getCreatedAt(),
                 foundTask.getUpdatedAt()
         );
@@ -114,7 +125,7 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 작업을 찾을 수 없습니다."));
 
-        task.softDalete();
+        task.softDelete();
 
         return new DeleteTaskResDto(200, "deleted");
     }

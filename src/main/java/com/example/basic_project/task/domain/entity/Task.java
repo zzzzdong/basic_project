@@ -29,15 +29,16 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status taskStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id")
     private Member assignee;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private Member author;
 
     private LocalDate dueDate;
+    private LocalDate startedAt;
 
     @Column(nullable = false)
     private boolean isDeleted;
@@ -50,6 +51,9 @@ public class Task {
 
     @Column
     private LocalDateTime deletedAt;
+
+
+
 
     public String getTitle() {
         return title;
@@ -79,6 +83,10 @@ public class Task {
         return dueDate;
     }
 
+    public LocalDate getStartedAt() {
+        return startedAt;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -94,11 +102,21 @@ public class Task {
     public Task(String title,
                 String description,
                 Priority priority,
-                Member assigneeId,
+                Member assignee,
+                Member author,
                 LocalDate dueDate,
                 LocalDate startedAt,
                 Status taskStatus
     ) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.assignee = assignee;
+        this.author = author;
+        this.dueDate = dueDate;
+        this.startedAt = startedAt;
+        this.taskStatus = taskStatus;
+        this.isDeleted = false;
     }
 
     @PrePersist
@@ -129,10 +147,11 @@ public class Task {
         this.priority = priority;
         this.taskStatus = taskStatus;
         this.assignee = assignee;
-
+        this.dueDate = dueDate;
+        this.startedAt = startedAt;
     }
 
-    public void softDalete() {
+    public void softDelete() {
         this.isDeleted = true;
     }
 

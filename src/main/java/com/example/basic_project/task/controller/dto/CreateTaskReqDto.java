@@ -13,7 +13,9 @@ public class CreateTaskReqDto {
 
     private Priority priority;
 
-    private Member assigneeId;
+    private Long assigneeId;
+
+    private Long authorId;
 
     private LocalDate dueDate;
 
@@ -33,8 +35,12 @@ public class CreateTaskReqDto {
         return priority;
     }
 
-    public Member getAssigneeId() {
+    public Long getAssigneeId() {
         return assigneeId;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
     }
 
     public LocalDate getDueDate() {
@@ -53,7 +59,8 @@ public class CreateTaskReqDto {
             String title,
             String description,
             Priority priority,
-            Member assigneeId,
+            Long assigneeId,
+            Long authorId,
             LocalDate dueDate,
             LocalDate startedAt,
             Status taskStatus
@@ -62,6 +69,7 @@ public class CreateTaskReqDto {
         this.description = description;
         this.priority = priority;
         this.assigneeId = assigneeId;
+        this.authorId = authorId;
         this.dueDate = dueDate;
         this.startedAt = startedAt;
         this.taskStatus = taskStatus;
