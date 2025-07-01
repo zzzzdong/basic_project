@@ -9,6 +9,8 @@ import com.example.basic_project.task.domain.enums.Priority;
 import com.example.basic_project.task.domain.enums.Status;
 import com.example.basic_project.task.domain.repository.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Table;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -53,8 +55,7 @@ public class TaskService {
         Task savedtask = taskRepository.save(task);
         Long savedTaskId = savedtask.getId();
 
-        CreateTaskResDto resDto = new CreateTaskResDto(201, "작업이 생성되었습니다.", savedTaskId);
-        return resDto;
+        return new CreateTaskResDto(201, "작업이 생성되었습니다.", savedTaskId);
     }
 
     // 단건 조회
@@ -97,12 +98,11 @@ public class TaskService {
                         task.getUpdatedAt())
                 ).collect(Collectors.toList());
 
-        ReadTasksResDto resDto = new ReadTasksResDto(200, "success", taskDtoList);
-
-        return resDto;
+        return new ReadTasksResDto(200, "success", taskDtoList);
     }
 
     // 수정
+    @Transactional
     public UpdateTaskResDto updateTaskService(Long id, UpdateTaskReqDto reqDto) {
         String title = reqDto.getTitle();
         String description = reqDto.getDescription();

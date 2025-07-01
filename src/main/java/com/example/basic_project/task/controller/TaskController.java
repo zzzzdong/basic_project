@@ -26,11 +26,10 @@ public class TaskController {
 
     // 태스크 생성
     @PostMapping
-    public ResponseEntity<CreateTaskResDto> CreateTask(@RequestBody CreateTaskReqDto reqDto) {
+    public ResponseEntity<CreateTaskResDto> createTask(@RequestBody CreateTaskReqDto reqDto) {
         CreateTaskResDto resDto = taskService.createTaskService(reqDto);
 
-        ResponseEntity<CreateTaskResDto> response = new ResponseEntity<>(resDto, HttpStatus.CREATED);
-        return response;
+        return new ResponseEntity<>(resDto, HttpStatus.CREATED);
     }
 
     // 태스크 단건 조회
@@ -38,8 +37,7 @@ public class TaskController {
     public ResponseEntity<ReadDetailTaskResDto> getTask(@PathVariable Long id) {
         ReadDetailTaskResDto resDto = taskService.getTaskService(id);
 
-        ResponseEntity<ReadDetailTaskResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 
     // 태스크 전체 조회
@@ -47,16 +45,14 @@ public class TaskController {
     public ResponseEntity<ReadTasksResDto> getTasks() {
         ReadTasksResDto resDto = taskService.getTasksService();
 
-        ResponseEntity<ReadTasksResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 
     // 태스크 수정
     @PutMapping("/{id}")
     public ResponseEntity<UpdateTaskResDto> updateTask(@PathVariable Long id, @RequestBody UpdateTaskReqDto reqDto) {
         UpdateTaskResDto resDto = taskService.updateTaskService(id, reqDto);
-        ResponseEntity<UpdateTaskResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 
     // 태스크 삭제
@@ -65,7 +61,6 @@ public class TaskController {
 
         DeleteTaskResDto resDto = taskService.deleteTaskService(id);
 
-        ResponseEntity<DeleteTaskResDto> response = new ResponseEntity<>(resDto, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 }

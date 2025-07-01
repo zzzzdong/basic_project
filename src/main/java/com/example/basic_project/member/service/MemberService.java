@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class MemberService {
 
     // 속
@@ -123,6 +122,7 @@ public class MemberService {
     }
 
     // 수정
+    @Transactional
     public UpdateMemberResDto updateMemberService(
             Long id,
             UpdateMemberReqDto reqDto
@@ -157,6 +157,7 @@ public class MemberService {
     }
 
     // 삭제
+    @Transactional
     public DeleteMemberResDto deleteMemberService(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
