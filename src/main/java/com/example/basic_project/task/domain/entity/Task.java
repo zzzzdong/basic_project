@@ -4,6 +4,7 @@ import com.example.basic_project.member.domain.entity.Member;
 import com.example.basic_project.task.domain.enums.Priority;
 import com.example.basic_project.task.domain.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,5 +1,6 @@
 package com.example.basic_project.member.service;
 
+import com.example.basic_project.global.config.PasswordEncoder;
 import com.example.basic_project.member.controller.dto.*;
 import com.example.basic_project.member.domain.entity.Member;
 import com.example.basic_project.member.domain.enums.Role;
@@ -21,10 +22,12 @@ public class MemberService {
 
     // 속
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 생
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 기
@@ -36,13 +39,29 @@ public class MemberService {
         String password = reqDto.getPassword();
         Role role = reqDto.getrole();
 
-        Member member = new Member(email, password, name, role);
+
+        if (memberRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
+
+        validatePassword(password);
+
+        String encodedPassword = passwordEncoder.encode(password);
+
+        Member member = new Member(email, encodedPassword, name, role);
 
         Member savedmember = memberRepository.save(member);
         Long savedMemberId = savedmember.getId();
 
         CreateMemberResDto resDto =  new CreateMemberResDto(201, "회원 생성 되었습니다.", savedMemberId);
         return resDto;
+    }
+
+    private void validatePassword(String password) {
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        if (!password.matches(regex)) {
+            throw new IllegalArgumentException("비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.");
+        }
     }
 
     // 단건 조회
