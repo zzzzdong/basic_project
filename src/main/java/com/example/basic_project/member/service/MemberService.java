@@ -5,16 +5,11 @@ import com.example.basic_project.member.controller.dto.*;
 import com.example.basic_project.member.domain.entity.Member;
 import com.example.basic_project.member.domain.enums.Role;
 import com.example.basic_project.member.domain.repository.MemberRepository;
-import com.fasterxml.jackson.annotation.JacksonInject;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +34,6 @@ public class MemberService {
         String password = reqDto.getPassword();
         Role role = reqDto.getrole();
 
-
         if (memberRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
@@ -53,8 +47,7 @@ public class MemberService {
         Member savedmember = memberRepository.save(member);
         Long savedMemberId = savedmember.getId();
 
-        CreateMemberResDto resDto =  new CreateMemberResDto(201, "회원 생성 되었습니다.", savedMemberId);
-        return resDto;
+        return new CreateMemberResDto(201, "회원 생성 되었습니다.", savedMemberId);
     }
 
     private void validatePassword(String password) {
@@ -135,9 +128,7 @@ public class MemberService {
                         member.getUpdatedAt())
                 ).collect(Collectors.toList());
 
-        ReadMembersResDto resDto = new ReadMembersResDto(200, "success", memberDtoList);
-
-        return resDto;
+        return new ReadMembersResDto(200, "success", memberDtoList);
     }
 
     // 수정
